@@ -46,16 +46,18 @@
 <script lang="ts">
 import Vue from 'vue';
 import HelloWorld from './components/HelloWorld.vue';
+import { Component } from "vue-property-decorator";
 
-export default Vue.extend({
-  name: 'App',
-
+@Component({
+  name: "App",
   components: {
     HelloWorld,
-  },
+  }
+})
+export default class App extends Vue {
+  mounted() {
+    console.log("onload");
+  }
+}
 
-  data: () => ({
-    //
-  }),
-});
 </script>
