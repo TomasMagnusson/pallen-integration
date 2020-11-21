@@ -39,6 +39,7 @@
 
     <v-main>
       <HelloWorld/>
+      <div> {{data}}</div>
     </v-main>
   </v-app>
 </template>
@@ -55,8 +56,24 @@ import { Component } from "vue-property-decorator";
   }
 })
 export default class App extends Vue {
+  public data: string = "xyz";
+
+
+  public async Execute():Promise<string> {
+      const res = await fetch(`/api/message`);
+      const {text} = await res.json();
+      console.log(text);
+      return text;
+  }
+
   mounted() {
-    console.log("onload");
+
+    console.log("onload: ");
+  
+
+    this.Execute().then(data => {this.data = data;});
+
+    
   }
 }
 
