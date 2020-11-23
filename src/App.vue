@@ -1,79 +1,49 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" app>
+      <!--  -->
+    </v-navigation-drawer>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+    <v-app-bar app>
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-toolbar-title>Pallen-integration</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
-      <div> {{data}}</div>
+      <!--  -->
     </v-main>
+
+    <v-footer :fixed="fixed" app>
+      <span style="margin-left: 24px"
+        >&copy; {{ new Date().getFullYear() }} TM Elektronik AB</span
+      >
+      <v-spacer></v-spacer>
+      <span style="margin-right: 20px">Byggd med VuetifyJS och Azure Static Webapps</span>
+    </v-footer>
   </v-app>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import Vue from "vue";
 import { Component } from "vue-property-decorator";
 
 @Component({
   name: "App",
-  components: {
-    HelloWorld,
-  }
 })
 export default class App extends Vue {
-  public data: string = "xyz";
+  drawer = false;
 
-
-  public async Execute():Promise<string> {
-      const res = await fetch(`/api/message`);
-      const {text} = await res.json();
-      console.log(text);
-      return text;
+  public async getUserInfo(): Promise<any> {
+    const response = await fetch("/.auth/me");
+    const payload = await response.json();
+    const { clientPrincipal } = payload;
+    return clientPrincipal;
   }
 
   mounted() {
+    this.getUserInfo().then(u => {console.log(u);})
 
-    console.log("onload: ");
-  
-
-    this.Execute().then(data => {this.data = data;});
-
-    
   }
 }
 
