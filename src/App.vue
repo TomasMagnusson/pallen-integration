@@ -2,6 +2,7 @@
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer" app>
       <!--  -->
+      <a href="/.auth/logout?post_logout_redirect_uri=www.google.com">Logga ut</a>
     </v-navigation-drawer>
 
     <v-app-bar app>
