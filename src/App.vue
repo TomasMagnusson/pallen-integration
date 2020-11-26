@@ -9,6 +9,15 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Pallen-integration</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <span>{{getUser()}}</span>
+      <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+      <v-icon large color="blue darken-2" v-bind="attrs"
+          v-on="on">mdi-account-circle</v-icon>
+    </template>
+      <span>Inloggad användare</span>
+    </v-tooltip>
     </v-app-bar>
 
     <v-main>
@@ -17,7 +26,7 @@
 
     <v-footer :fixed="fixed" app>
       <span style="margin-left: 24px"
-        >&copy; {{ new Date().getFullYear() }} TM Elektronik AB</span
+        >&copy; {{ new Date().getFullYear() }} TM Elektronik AB, Programversion: {{getVersion()}}</span
       >
       <v-spacer></v-spacer>
       <span style="margin-right: 20px">Byggd med VuetifyJS och Azure Static Webapps</span>
@@ -28,9 +37,11 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import store from "./store/store";
 
 @Component({
   name: "App",
+  store
 })
 export default class App extends Vue {
   drawer = false;
@@ -43,8 +54,26 @@ export default class App extends Vue {
   }
 
   mounted() {
-    this.getUserInfo().then(u => {console.log(u);})
+    this.getUserInfo().then(u => {console.log(u);});
+  }
 
+  created() {
+    store.commit("profileModule/storeClientPrincipal", {
+      "identityProvider": "aad",
+      "userId": "1eeb43bacf7b463792d72e2a4324cfb0",
+      "userDetails": "tomasmagnusson1234@gmail.com",
+      "userRoles": [
+        "anonymous",
+        "authenticated"
+      ]});
+  }
+
+  getVersion() {
+    return this.$store.state.version;
+  }
+
+  getUser() {
+    return this.$store.getters["profileModule/ClientPrincipal"]?.userDetails;
   }
 }
 
