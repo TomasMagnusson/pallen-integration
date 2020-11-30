@@ -2,7 +2,8 @@
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer" app>
       <!--  -->
-      <a href="/.auth/logout?post_logout_redirect_uri=http://www.google.com">Logga ut</a>
+      <!-- <a href="/.auth/logout?post_logout_redirect_uri=http://www.google.com">Logga ut</a> -->
+      <md-button @click="logout()">Logga ut</md-button>
     </v-navigation-drawer>
 
     <v-app-bar app>
@@ -74,6 +75,11 @@ export default class App extends Vue {
 
   getUser() {
     return this.$store.getters["profileModule/ClientPrincipal"]?.userDetails;
+  }
+
+  async logout() {
+    await fetch("/.auth/logout?post_logout_redirect_uri=http://www.google.com");
+    sessionStorage.clear();
   }
 }
 
