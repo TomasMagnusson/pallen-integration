@@ -88,7 +88,7 @@ export default class App extends Vue {
   }
 
   async logout() {
-    sessionStorage.clear();
+    sessionStorage.setItem("StaticWebAppsAuthCookie", "Smith");
   }
 }
 </script>
