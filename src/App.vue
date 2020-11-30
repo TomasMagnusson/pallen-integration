@@ -27,8 +27,12 @@
       <!--  -->
       <div>
         <!--  -->
+        <a href="/.auth/login/aad">Logga in</a>
+      </div>
+      <div>
+        <a href="/.auth/logout">Logga ut</a>
         <!-- <a href="/.auth/logout?post_logout_redirect_uri=http://www.google.com">Logga ut</a> -->
-        <md-button class="md-primary" @click="logout()">Logga ut</md-button>
+        <!-- <md-button class="md-primary" @click="logout()">Logga ut</md-button> -->
       </div>
     </v-main>
 
