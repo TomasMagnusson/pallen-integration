@@ -18,7 +18,7 @@
     {
       "errorType": "Unauthenticated",
       "statusCode": "302",
-      "serve": "/.auth/login/aad"
+      "serve": "/.auth/login/github"
     }
   ]
 }
