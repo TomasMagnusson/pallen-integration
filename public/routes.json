@@ -5,6 +5,9 @@
       "serve": "/index.html",
       "statusCode": 200,
       "allowedRoles": ["authenticated"]
+    },{
+      "route": "/logout",
+      "serve": "/.auth/logout"
     }
   ],
   "platformErrorOverrides": [

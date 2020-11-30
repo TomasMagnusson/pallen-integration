@@ -3,9 +3,7 @@
     <v-navigation-drawer v-model="drawer" app>
       <div>
         <!--  -->
-        <a href="/.auth/logout?post_logout_redirect_uri=http://www.google.com"
-          >Logga ut</a
-        >
+        <a href="/logout">Logga ut</a>
       </div>
     </v-navigation-drawer>
 
