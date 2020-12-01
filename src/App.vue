@@ -92,6 +92,13 @@ export default class App extends Vue {
   async logout() {
     sessionStorage.setItem("StaticWebAppsAuthCookie", "Smith");
 
-    document.cookie = "StaticWebAppsAuthCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";  }
+    document.cookie = "StaticWebAppsAuthCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";  
+    document.cookie = "has_recent_activity=1; path=/; expires=Tue, 01 Dec 2020 20:28:27 GMT; secure; HttpOnly; SameSite=Lax";
+    document.cookie = "logged_in=no; domain=.github.com; path=/; expires=Wed, 01 Dec 2021 19:28:27 GMT; secure; HttpOnly; SameSite=Lax";
+    document.cookie = "user_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; HttpOnly; SameSite=Lax";
+    document.cookie = "__Host-user_session_same_site=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; HttpOnly; SameSite=Lax";
+    document.cookie = "dotcom_user=; domain=.github.com; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; HttpOnly; SameSite=Lax";
+    
+  }
 }
 </script>
