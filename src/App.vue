@@ -53,18 +53,6 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import store from "./store/store";
 
-//Creates client side cookie
-function Cookie(name, value, minutes) {
-   var expires = "";
-   if (minutes) {
-      var date = new Date();
-      date.setTime(date.getTime() + (minutes * 60 * 1000));
-      expires = "; expires=" + date.toGMTString();
-   }
-
-   document.cookie = name + "=" + value + expires;
-}
-
 @Component({
   name: "App",
   store,
@@ -105,7 +93,6 @@ export default class App extends Vue {
   async logout() {
     sessionStorage.setItem("StaticWebAppsAuthCookie", "Smith");
 
-    Cookie("StaticWebAppsAuthCookie",null,-1);
-  }
+    document.cookie = "StaticWebAppsAuthCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";  }
 }
 </script>
