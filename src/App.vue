@@ -74,12 +74,12 @@ export default class App extends Vue {
   }
 
   created() {
-    store.commit("profileModule/storeClientPrincipal", {
-      identityProvider: "aad",
-      userId: "1eeb43bacf7b463792d72e2a4324cfb0",
-      userDetails: "tomasmagnusson1234@gmail.com",
-      userRoles: ["anonymous", "authenticated"],
-    });
+    // store.commit("profileModule/storeClientPrincipal", {
+    //   identityProvider: "aad",
+    //   userId: "1eeb43bacf7b463792d72e2a4324cfb0",
+    //   userDetails: "tomasmagnusson1234@gmail.com",
+    //   userRoles: ["anonymous", "authenticated"],
+    // });
   }
 
   getVersion() {
