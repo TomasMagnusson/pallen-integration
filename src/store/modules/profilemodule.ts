@@ -26,14 +26,14 @@ export function profilePlugin(store:any) {
 
 @Module({ namespaced: true})
 export default class ProfilenModule extends VuexModule {
-    // clientPrincipal: ClientPrincipal = {
-    //     identityProvider:"",
-    //     userId:"",
-    //     userDetails:"",
-    //     userRoles:[]
-    // };
+    clientPrincipal: ClientPrincipal = {
+        identityProvider:"",
+        userId:"",
+        userDetails:"",
+        userRoles:[]
+    };
 
-    clientPrincipal?: ClientPrincipal;
+    // clientPrincipal?: ClientPrincipal;
     
     @Mutation
     storeClientPrincipal(_clientPrincipal:ClientPrincipal) {
