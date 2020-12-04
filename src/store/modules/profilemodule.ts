@@ -19,7 +19,7 @@ async function getUserInfo(): Promise<ClientPrincipal> {
 
 export function profilePlugin(store:any) {
     getUserInfo().then((clientPrincipal?: ClientPrincipal) => {
-        console.log("profilePlugin:" + clientPrincipal);
+        console.log(clientPrincipal);
         store.commit("profileModule/storeClientPrincipal", clientPrincipal);
     })
 }
@@ -30,7 +30,7 @@ export default class ProfilenModule extends VuexModule {
 
     @Mutation
     storeClientPrincipal(_clientPrincipal:ClientPrincipal) {
-        console.log("storeClientPrincipal:" + _clientPrincipal);
+        console.log(_clientPrincipal);
         this.clientPrincipal = _clientPrincipal;
     }
 
