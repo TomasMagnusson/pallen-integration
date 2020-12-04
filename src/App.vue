@@ -12,14 +12,14 @@
 
       <v-toolbar-title>Pallen-integration</v-toolbar-title>
       <v-spacer></v-spacer>
-      <span>{{ getUser() }}</span>
+      <span>{{ user }}</span>
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-icon large color="blue darken-2" v-bind="attrs" v-on="on"
             >mdi-account-circle</v-icon
           >
         </template>
-        <span>Inloggad användare</span>
+        <span>Inloggad användare<br/>{{roles}}</span>
       </v-tooltip>
     </v-app-bar>
 
@@ -55,7 +55,7 @@ import store from "./store/store";
 
 @Component({
   name: "App",
-  store,
+  store
 })
 export default class App extends Vue {
   drawer = false;
@@ -74,20 +74,33 @@ export default class App extends Vue {
   }
 
   created() {
-    store.commit("profileModule/storeClientPrincipal", {
-      identityProvider: "aad",
-      userId: "1eeb43bacf7b463792d72e2a4324cfb0",
-      userDetails: "tomasmagnusson1234@gmail.com",
-      userRoles: ["anonymous", "authenticated"],
-    });
+    // store.commit("profileModule/storeClientPrincipal", {
+    //   identityProvider: "aad",
+    //   userId: "1eeb43bacf7b463792d72e2a4324cfb0",
+    //   userDetails: "tomasmagnusson1234@gmail.com",
+    //   userRoles: ["anonymous", "authenticated"],
+    // });
+
+    // setTimeout(() =>{
+    //   store.commit("profileModule/storeClientPrincipal", {
+    //     identityProvider: "aad",
+    //     userId: "1eeb43bacf7b463792d72e2a4324cfb0",
+    //     userDetails: "windowslive@tmelektronik.se",
+    //     userRoles: ["anonymous", "authenticated"],
+    //   });
+    // }, 10000);
   }
 
   getVersion() {
     return this.$store.state.version;
   }
 
-  getUser() {
+  get user() {
     return this.$store.getters["profileModule/ClientPrincipal"]?.userDetails;
+  }
+
+  get roles() {
+    return this.$store.getters["profileModule/ClientPrincipal"]?.userRoles;
   }
 
   async logout() {
