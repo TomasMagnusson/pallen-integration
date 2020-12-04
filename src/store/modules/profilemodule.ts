@@ -1,6 +1,7 @@
 // profilemodule.ts
 
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
+import Vuex, { StoreOptions } from 'vuex';
 
 export interface ClientPrincipal {
     identityProvider: string;
@@ -9,7 +10,20 @@ export interface ClientPrincipal {
     userRoles: string[];
 }
 
-@Module({ namespaced: true })
+async function getUserInfo(): Promise<ClientPrincipal> {
+    const response = await fetch("/.auth/me");
+    const payload = await response.json();
+    const { clientPrincipal } = payload;
+    return clientPrincipal;
+}
+
+export function profilePlugin(store:any) {
+    getUserInfo().then((clientPrincipal?: ClientPrincipal) => {
+        store.commit("profileModule/storeClientPrincipal", clientPrincipal);
+    })
+}
+
+@Module({ namespaced: true})
 export default class ProfilenModule extends VuexModule {
     clientPrincipal?: ClientPrincipal;
 
