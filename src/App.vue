@@ -30,7 +30,8 @@
         <a href="/.auth/login/aad">Logga in</a>
       </div>
       <div>
-        <a href="/.auth/logout?post_logout_redirect_uri=https://github.com/logout">Logga ut</a>
+        <a href="/.auth/logout?post_logout_redirect_uri=https://portal.azure.com/SignOut">Logga ut</a>
+        <!-- <a href="/.auth/logout?post_logout_redirect_uri=https://github.com/logout">Logga ut</a> -->
       </div>
     </v-main>
 
