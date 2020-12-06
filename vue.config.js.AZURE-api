@@ -6,6 +6,6 @@ module.exports = {
     "vuetify"
   ],
   devServer: {
-    proxy: 'http://localhost:7071'
+    proxy: 'https://red-stone-0163d6203.azurestaticapps.net'
   }
 }
