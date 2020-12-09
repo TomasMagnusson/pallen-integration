@@ -20,15 +20,21 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
             }
         });
         context.log(res.data.Customers);
+        context.res = {
+            // status: 200, /* Defaults to 200 */
+            body: {
+                text: JSON.stringify(res.data.Customers[0],null,"<br/>")
+            }
+        };
     } catch (err) {
         context.log(err.message);
+        context.res = {
+            // status: 200, /* Defaults to 200 */
+            body: {
+                text: err.message
+            }
+        };
     }
-    context.res = {
-        // status: 200, /* Defaults to 200 */
-        body: {
-            text: "Hello from api!"
-        }
-    };
 
 };
 
