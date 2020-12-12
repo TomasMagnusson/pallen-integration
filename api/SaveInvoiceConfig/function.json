@@ -6,9 +6,9 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get"
+        "post"
       ],
-      "route": "message"
+      "route": "saveinvoiceconfig"
     },
     {
       "type": "http",
@@ -18,10 +18,10 @@
     {
       "type": "blob",
       "direction": "out",
-      "name": "palleIntegrationBlob",
-      "path": "outcontainer/{rand-guid}",
+      "name": "invoiceConfigBlob",
+      "path": "outcontainer/invoiceConfig",
       "connection": "AzureWebJobsStorage"
     }
   ],
-  "scriptFile": "../dist/GetMessage/index.js"
+  "scriptFile": "../dist/SaveInvoiceConfig/index.js"
 }

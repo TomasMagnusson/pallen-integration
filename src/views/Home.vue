@@ -9,9 +9,11 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
+import store from "../store/store";
 
 export default {
   name: "Home",
+  store,
   components: {
     HelloWorld,
   },
@@ -19,10 +21,12 @@ export default {
     message: 'Hello Vue.js!'
   }),
   mounted: async function() {
-      let response = await fetch(`api/message`);
-      let msg = await response.json();
+      // let response = await fetch(`api/message`);
+      // let msg = await response.json();
 
-      this.message = msg.text;
+      // this.message = msg.text;
+
+      this.$store.commit("invoiceConfigModule/storeInvoiceConfig", {creationDate: new Date()});
   }
 };
 </script>

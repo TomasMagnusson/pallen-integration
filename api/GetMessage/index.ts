@@ -9,7 +9,9 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     // const client = df.getClient(context);
     // const instanceId = await client.startNew(req.params.functionName, undefined, req.body);
-
+    context.log('Node.js Blob trigger function processed', context.bindings.palleIntegrationBlob);
+    context.bindings.palleIntegrationBlob = "foo!";
+    context.done();
     try {
         let res = await axios.get("https://api.fortnox.se/3/customers", {
             headers: {
