@@ -19,7 +19,7 @@
       "type": "blob",
       "direction": "out",
       "name": "invoiceConfigBlob",
-      "path": "outcontainer/invoiceConfig",
+      "path": "outcontainer/invoiceConfig.json",
       "connection": "MyBlobStorage"
     }
   ],
