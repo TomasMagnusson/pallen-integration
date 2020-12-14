@@ -1,5 +1,5 @@
 import { AzureFunction, Context, HttpRequest } from "@azure/functions";
-import {InvoiceConfig} from "./InvoiceModels";
+import {InvoiceConfig} from "../models/InvoiceModels";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     let config:InvoiceConfig = req.body;

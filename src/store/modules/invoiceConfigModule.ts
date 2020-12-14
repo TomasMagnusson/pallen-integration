@@ -2,7 +2,7 @@
 
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import Vuex, { StoreOptions } from 'vuex';
-import { InvoiceConfig } from "../../models/InvoiceModels";
+import { InvoiceConfig } from "../../../api/models/InvoiceModels";
 
 async function postData(_data: InvoiceConfig) {
     const response = await fetch("api/saveinvoiceconfig", {
