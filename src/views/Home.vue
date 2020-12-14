@@ -28,7 +28,7 @@ export default {
 
       console.log("Home - mounted!");
 
-      // this.$store.commit("invoiceConfigModule/storeInvoiceConfig", {creationDate: new Date()});
+      this.$store.commit("invoiceConfigModule/storeInvoiceConfig", {creationDate: new Date()});
   }
 };
 </script>
