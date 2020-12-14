@@ -18,15 +18,17 @@ export default {
     HelloWorld,
   },
   data: () => ({
-    message: 'Hello Vue.js!'
+    message: "Hello!"
   }),
   mounted: async function() {
-      // let response = await fetch(`api/message`);
-      // let msg = await response.json();
+      let response = await fetch(`api/message`);
+      let msg = await response.json();
 
-      // this.message = msg.text;
+      this.message = msg.text;
 
-      this.$store.commit("invoiceConfigModule/storeInvoiceConfig", {creationDate: new Date()});
+      console.log("Home - mounted!");
+
+      // this.$store.commit("invoiceConfigModule/storeInvoiceConfig", {creationDate: new Date()});
   }
 };
 </script>
