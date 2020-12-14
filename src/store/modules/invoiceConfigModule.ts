@@ -12,6 +12,18 @@ async function postData(_data: InvoiceConfig) {
     });
 }
 
+const fetchData = async (): Promise<InvoiceConfig> => {
+    let response = await fetch("api/fetchinvoiceconfig");
+    return response.json();
+}
+
+export function invoiceConfigPlugin(store: any) {
+    fetchData().then((invoiceConfig?: InvoiceConfig) => {
+        console.log(invoiceConfig);
+        store.commit("invoiceConfigModule/storeInvoiceConfig", invoiceConfig);
+    })
+}
+
 @Module({ namespaced: true })
 export default class InvoiceConfigModule extends VuexModule {
     invoiceConfig: InvoiceConfig = { creationDate: new Date("2020-12-11") };
@@ -21,6 +33,10 @@ export default class InvoiceConfigModule extends VuexModule {
         this.invoiceConfig = _invoiceConfig;
         console.log(_invoiceConfig);
         await postData(_invoiceConfig);
+    }
+
+    get InvoiceConfig() {
+        return this.invoiceConfig;
     }
 
 }

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex, { StoreOptions } from 'vuex';
-import ProfileModule, {profilePlugin} from './modules/profilemodule';
-import InvoiceConfigModule from "./modules/invoiceConfigModule"
+import ProfileModule, { profilePlugin } from './modules/profilemodule';
+import InvoiceConfigModule, { invoiceConfigPlugin } from "./modules/invoiceConfigModule"
 
 Vue.use(Vuex);
 
@@ -17,7 +17,7 @@ const store: StoreOptions<RootState> = {
         profileModule: ProfileModule,
         invoiceConfigModule: InvoiceConfigModule
     },
-    plugins: [profilePlugin]
+    plugins: [profilePlugin, invoiceConfigPlugin]
 }
 
 export default new Vuex.Store<RootState>(store);

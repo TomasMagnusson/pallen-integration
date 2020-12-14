@@ -1,0 +1,27 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get"
+      ],
+      "route": "fetchinvoiceconfig"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "blob",
+      "direction": "in",
+      "name": "invoiceConfigBlob",
+      "path": "outcontainer/invoiceConfig.json",
+      "connection": "MyBlobStorage"
+    }
+  ],
+  "scriptFile": "../dist/FetchInvoiceConfig/index.js"
+}
