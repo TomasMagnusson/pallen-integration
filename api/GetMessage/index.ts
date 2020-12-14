@@ -12,7 +12,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
     context.log('Node.js Blob trigger function processed', context.bindings.palleIntegrationBlob);
 
     context.res = {
-        body: { text: process.env.AzureWebJobsStorage }
+        body: { text: process.env.Foo }
 
     }
     // context.bindings.palleIntegrationBlob = "foo!";
