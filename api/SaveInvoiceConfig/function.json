@@ -20,7 +20,7 @@
       "direction": "out",
       "name": "invoiceConfigBlob",
       "path": "outcontainer/invoiceConfig",
-      "connection": "AzureWebJobsStorage"
+      "connection": "MyBlobStorage"
     }
   ],
   "scriptFile": "../dist/SaveInvoiceConfig/index.js"
