@@ -30,15 +30,16 @@ export default {
 
     // this.$store.commit("invoiceConfigModule/storeInvoiceConfig", {creationDate: new Date()});
 
-    await fetch("api/saveinvoiceconfig", {
-      method: "POST",
-      cache: "no-cache",
-      body: JSON.stringify({ creationDate: new Date() }),
-    });
+    // await fetch("api/saveinvoiceconfig", {
+    //   method: "POST",
+    //   cache: "no-cache",
+    //   body: JSON.stringify({ creationDate: new Date() }),
+    // });
   },
   computed: {
     creationDate: function() {
-      return this.$store.getters["invoiceConfigModule/InvoiceConfig"]?.creationDate;
+      return this.$store.getters["invoiceConfigModule/fetchCreationDate"];
+      // return this.$store.getters["invoiceConfigModule/invoiceConfig"]?.creationDate;
     }
   }
 

@@ -1,5 +1,6 @@
 
 
 export interface InvoiceConfig {
-    creationDate: Date
+    creationDate: Date,
+    invoiceDate: Date
 };

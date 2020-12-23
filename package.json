@@ -18,6 +18,7 @@
     "vuex-module-decorators": "^1.0.1"
   },
   "devDependencies": {
+    "@mdi/font": "^5.8.55",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "@vue/cli-plugin-babel": "~4.2.0",
@@ -29,7 +30,6 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.1.2",
-    "material-design-icons-iconfont": "^6.1.0",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
     "typescript": "~3.9.3",

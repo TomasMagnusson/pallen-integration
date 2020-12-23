@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
+import InvoiceSettings from '../views/InvoiceSettings.vue'
 import NotFound404Page from '../components/NotFound404Page.vue'
 
 Vue.use(VueRouter)
@@ -10,6 +11,11 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: 'Home',
     component: Home
+  },
+  {
+    path: '/invoice-settings',
+    name: 'invoice-settings',
+    component: InvoiceSettings
   },
   {
     path: '/logout',

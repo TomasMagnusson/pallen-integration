@@ -79,6 +79,7 @@ export default class App extends Vue {
   drawer = false;
   items = [
     { title: "Hem", icon: "mdi-home", link: "/" },
+    { title: "Fakturainställning", icon: "mdi-table-settings", link: "/invoice-settings"},
     { title: "Dashboard", icon: "mdi-view-dashboard", link: "/dashboard" },
     { title: "Photos", icon: "mdi-image", link: "/photos" },
     { title: "Om", icon: "mdi-help-box", link: "/about" },
