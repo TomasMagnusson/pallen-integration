@@ -1,47 +1,41 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-    <div>{{ creationDate }}</div>
+  <div style="margin-top: 20px">
+    <v-container fluid class="grey lighten-5 mb-6">
+      <v-simple-table dense>
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-left">Fastighet</th>
+              <th class="text-left">Namn</th>
+              <th class="text-left">Adress</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in customers" :key="item.CustomerNumber">
+              <td>{{ item.CustomerNumber }}</td>
+              <td>{{ item.Name }}</td>
+              <td>{{ item.Address1 }}</td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-container>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+<script lang='ts'>
+// import { Customer } from "../models/fortNoxData";
+import { Vue, Component } from "vue-property-decorator";
 import store from "../store/store";
 
-export default {
+@Component({
   name: "Home",
   store,
-  components: {
-    HelloWorld,
-  },
-  data: () => ({
-    message: "Hello!",
-  }),
-  mounted: async function () {
-    let response = await fetch(`api/message`);
-    let msg = await response.json();
-
-    this.message = msg.text;
-
-    console.log("Home - mounted!");
-
-    // this.$store.commit("invoiceConfigModule/storeInvoiceConfig", {creationDate: new Date()});
-
-    // await fetch("api/saveinvoiceconfig", {
-    //   method: "POST",
-    //   cache: "no-cache",
-    //   body: JSON.stringify({ creationDate: new Date() }),
-    // });
-  },
-  computed: {
-    creationDate: function() {
-      return this.$store.getters["invoiceConfigModule/fetchCreationDate"];
-      // return this.$store.getters["invoiceConfigModule/invoiceConfig"]?.creationDate;
-    }
+})
+export default class Home extends Vue {
+  get customers() {
+    let v = this.$store.getters["fortNoxModule/fetchCustomers"];
+    return v;
   }
-
-};
+}
 </script>

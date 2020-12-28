@@ -2,8 +2,13 @@
 
 import { Module, VuexModule, Mutation, Action, MutationAction } from "vuex-module-decorators";
 import Vuex, { StoreOptions } from 'vuex';
-import { InvoiceConfig } from "../../../api/models/InvoiceModels";
+// import { InvoiceConfig } from "../../../api/models/InvoiceModels";
 import store from "../store";
+
+export interface InvoiceConfig {
+    creationDate: Date,
+    invoiceDate: Date
+}
 
 async function postData(_data: InvoiceConfig) {
     const response = await fetch("api/saveinvoiceconfig", {
@@ -73,9 +78,9 @@ export default class InvoiceConfigModule extends VuexModule {
     }
 
 
-    get invoiceConfig(): InvoiceConfig {
-        return { creationDate: this.creationDate, invoiceDate: this.invoiceDate };
-    }
+    // get invoiceConfig(): InvoiceConfig {
+    //     return { creationDate: this.creationDate, invoiceDate: this.invoiceDate };
+    // }
 
     @Mutation
     stampVersion() {
