@@ -20,8 +20,8 @@ async function postData(_data: InvoiceConfig) {
 }
 
 async function fetchData(): Promise<InvoiceConfig> {
-    let response = await fetch("api/fetchinvoiceconfig");
-    let j = await response.json();
+    const response = await fetch("api/fetchinvoiceconfig");
+    const j = await response.json();
     return {
         creationDate: new Date(j.creationDate),
         invoiceDate: new Date(j.invoiceDate)

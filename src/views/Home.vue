@@ -23,9 +23,13 @@
   </div>
 </template>
 
-<script lang='ts'>
-// import { Customer } from "../models/fortNoxData";
-import { Vue, Component } from "vue-property-decorator";
+<script lang="ts">
+import Vue from "vue";
+import Component from "vue-class-component";
+// import { Component } from "vue-property-decorator";
+
+import { Customer } from "../models/fortNoxData";
+// import { Vue, Component } from "vue-property-decorator";
 import store from "../store/store";
 
 @Component({
@@ -34,7 +38,7 @@ import store from "../store/store";
 })
 export default class Home extends Vue {
   get customers() {
-    let v = this.$store.getters["fortNoxModule/fetchCustomers"];
+    let v: Customer[] = this.$store.getters["fortNoxModule/fetchCustomers"];
     return v;
   }
 }

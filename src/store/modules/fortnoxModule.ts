@@ -5,8 +5,8 @@ import store from "../store";
 import { Customer, Article, Invoice, FortNoxData } from '../../models/fortNoxData';
 
 async function fetchData(): Promise<FortNoxData> {
-    let response = await fetch("api/fetchcustomers");
-    let cs: Customer[] = await response.json();
+    const response = await fetch("api/fetchcustomers");
+    const cs: Customer[] = await response.json();
     return {
         customersData: cs,
         articlesData: <Article[]>[],
