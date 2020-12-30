@@ -5,7 +5,8 @@ export interface Customer {
     CustomerNumber: number,
     Name: string,
     Address1: string,
-    Email: string
+    Email: string,
+    Invoiced: boolean
 }
 
 export interface Article {

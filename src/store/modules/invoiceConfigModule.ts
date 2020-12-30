@@ -55,7 +55,7 @@ export default class InvoiceConfigModule extends VuexModule {
     @MutationAction
     async loadInvoiceConfig() {
         const invoiceConfig: InvoiceConfig = await fetchData();
-
+        store.dispatch('fortNoxModule/findInvoices', invoiceConfig.invoiceDate)
         console.log(invoiceConfig);
         return { creationDate: invoiceConfig.creationDate, invoiceDate: invoiceConfig.invoiceDate };
     }
@@ -78,9 +78,9 @@ export default class InvoiceConfigModule extends VuexModule {
     }
 
 
-    // get invoiceConfig(): InvoiceConfig {
-    //     return { creationDate: this.creationDate, invoiceDate: this.invoiceDate };
-    // }
+    get invoiceConfig(): InvoiceConfig {
+        return { creationDate: this.creationDate, invoiceDate: this.invoiceDate };
+    }
 
     @Mutation
     stampVersion() {
