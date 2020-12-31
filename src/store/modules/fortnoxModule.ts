@@ -44,19 +44,13 @@ export default class FortNoxModule extends VuexModule {
     @Action
     async findInvoices(d: Date) {
         const invsMap = await fetchInvoices(d.toLocaleDateString())
-        // const fortNoxData = await fetchData();
 
-        // fortNoxData.customersData[0].Invoiced = true
-        // return { customersData: fortNoxData.customersData }
-        // await fetchData();
+        store.commit('fortNoxModule/setInvoiceData', invsMap)
         loadPromise.then((fortNoxData) => {
-            // const customersData = store.getters['fortNoxModule/fetchCustomers']
             const cdcopy = fortNoxData.customersData.concat()
             cdcopy.forEach(cust => cust.Invoiced = (invsMap.get(cust.CustomerNumber) !== undefined))
-            // cdcopy[0].Invoiced = true;
             store.commit('fortNoxModule/setCustomerData', cdcopy)
         })
-        // return { customersData: cdcopy }
     }
 
     get fetchCustomers(): Customer[] {
@@ -66,5 +60,10 @@ export default class FortNoxModule extends VuexModule {
     @Mutation
     setCustomerData(cd: Customer[]) {
         this.customersData = cd;
+    }
+
+    @Mutation
+    setInvoiceData(invsMap: Map<string, Invoice>) {
+        this.invoicesData = invsMap
     }
 }
