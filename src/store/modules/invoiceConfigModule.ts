@@ -56,7 +56,6 @@ export default class InvoiceConfigModule extends VuexModule {
     async loadInvoiceConfig() {
         const invoiceConfig: InvoiceConfig = await fetchData();
         store.dispatch('fortNoxModule/findInvoices', invoiceConfig.invoiceDate)
-        console.log(invoiceConfig);
         return { creationDate: invoiceConfig.creationDate, invoiceDate: invoiceConfig.invoiceDate };
     }
 

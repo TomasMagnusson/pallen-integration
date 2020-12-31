@@ -53,7 +53,7 @@
       <router-view></router-view>
     </v-main>
 
-    <v-footer :fixed="fixed" app>
+    <v-footer fixed app>
       <span style="margin-left: 24px"
         >&copy; {{ new Date().getFullYear() }} TM Elektronik AB, Programversion:
         {{ getVersion() }}</span

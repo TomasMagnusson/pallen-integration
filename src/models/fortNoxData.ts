@@ -2,7 +2,7 @@
 
 
 export interface Customer {
-    CustomerNumber: number,
+    CustomerNumber: string,
     Name: string,
     Address1: string,
     Email: string,
@@ -14,7 +14,8 @@ export interface Article {
 }
 
 export interface Invoice {
-    invliceNumber: string
+    InvoiceDate: string,
+    CustomerNumber: string
 }
 
 export interface FortNoxData {

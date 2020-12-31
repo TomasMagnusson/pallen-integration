@@ -14,7 +14,16 @@ async function fetchData(): Promise<FortNoxData> {
     }
 }
 
-let loadPromise: Promise<FortNoxData> = new Promise<FortNoxData>( () => {});
+async function fetchInvoices(invoiceDate: string): Promise<Map<string, Invoice>> {
+    const response = await fetch("api/fetchinvoices/?invoiceDate=" + invoiceDate)
+    const invs: Invoice[] = await response.json();
+    const invsMap = new Map<string, Invoice>()
+
+    invs.forEach(inv => invsMap.set(inv.CustomerNumber, inv))
+    return invsMap
+}
+
+let loadPromise: Promise<FortNoxData> = new Promise<FortNoxData>(() => { });
 
 export async function fortNoxPlugin(store: any) {
     loadPromise = fetchData()
@@ -24,6 +33,7 @@ export async function fortNoxPlugin(store: any) {
 @Module({ namespaced: true })
 export default class FortNoxModule extends VuexModule {
     customersData: Customer[] = [];
+    invoicesData: Map<string, Invoice> = new Map<string, Invoice>()
 
     @MutationAction
     async loadFortNoxData() {
@@ -33,15 +43,17 @@ export default class FortNoxModule extends VuexModule {
 
     @Action
     async findInvoices(d: Date) {
+        const invsMap = await fetchInvoices(d.toLocaleDateString())
         // const fortNoxData = await fetchData();
 
         // fortNoxData.customersData[0].Invoiced = true
         // return { customersData: fortNoxData.customersData }
         // await fetchData();
-        loadPromise.then( (fortNoxData) => {
+        loadPromise.then((fortNoxData) => {
             // const customersData = store.getters['fortNoxModule/fetchCustomers']
             const cdcopy = fortNoxData.customersData.concat()
-            cdcopy[0].Invoiced = true;
+            cdcopy.forEach(cust => cust.Invoiced = (invsMap.get(cust.CustomerNumber) !== undefined))
+            // cdcopy[0].Invoiced = true;
             store.commit('fortNoxModule/setCustomerData', cdcopy)
         })
         // return { customersData: cdcopy }
