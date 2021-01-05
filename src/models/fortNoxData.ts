@@ -10,7 +10,9 @@ export interface Customer {
 }
 
 export interface Article {
-    articleNumer: string
+    ArticleNumer: string,
+    Description: string,
+    SalesPrice: number
 }
 
 export interface Invoice {
@@ -20,6 +22,6 @@ export interface Invoice {
 
 export interface FortNoxData {
     customersData: Customer[],
-    articlesData: Article[],
+    articlesData: Map<string, Article>,
     invoicesData: Invoice[]
 }

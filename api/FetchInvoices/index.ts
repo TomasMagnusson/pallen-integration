@@ -22,7 +22,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         };
 
     } catch (err) {
-        context.log(`FetchInvoices - Error: {err.message}`);
+        context.log(`FetchInvoices - Error: ${err.message}`);
         context.res = {
             status: 500, // Server error
             body: {

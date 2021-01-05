@@ -2,14 +2,17 @@
   <div style="margin-top: 20px">
     <v-container fluid class="grey lighten-5 mb-6">
       <v-row no-gutters>
-        <v-col cols="1">
+        <v-col cols="2">
           <v-text-field
             readonly
             label="Fakturadatum:"
             v-model="invoiceDate"
           ></v-text-field>
         </v-col>
-        <v-col cols="11"></v-col>
+        <v-col cols="8"></v-col>
+        <v-col cols="2">
+          <v-btn @click="createInvoices">Skapa fakturor</v-btn>
+        </v-col>
       </v-row>
       <v-row no-gutters>
         <v-col cols="12">
@@ -48,6 +51,8 @@ import { Customer } from "../models/fortNoxData";
 // import { Vue, Component } from "vue-property-decorator";
 import store from "../store/store";
 
+import {createInvoices} from '@/services/fortNoxService'
+
 @Component({
   name: "Home",
   store,
@@ -63,6 +68,11 @@ export default class Home extends Vue {
       "invoiceConfigModule/fetchInvoiceDate"
     ].toLocaleDateString();
   }
+
+  async createInvoices() {
+    await createInvoices()
+  }
+
 
 }
 </script>

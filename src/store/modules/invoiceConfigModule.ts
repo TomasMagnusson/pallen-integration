@@ -4,11 +4,7 @@ import { Module, VuexModule, Mutation, Action, MutationAction } from "vuex-modul
 import Vuex, { StoreOptions } from 'vuex';
 // import { InvoiceConfig } from "../../../api/models/InvoiceModels";
 import store from "../store";
-
-export interface InvoiceConfig {
-    creationDate: Date,
-    invoiceDate: Date
-}
+import { CustomerTypeConfig, InvoiceConfig, CustomerExtraConfig, CustomerConfig } from '@/models/configData'
 
 async function postData(_data: InvoiceConfig) {
     const response = await fetch("api/saveinvoiceconfig", {
@@ -24,7 +20,10 @@ async function fetchData(): Promise<InvoiceConfig> {
     const j = await response.json();
     return {
         creationDate: new Date(j.creationDate),
-        invoiceDate: new Date(j.invoiceDate)
+        invoiceDate: new Date(j.invoiceDate),
+        customerTypes: <CustomerTypeConfig[]>[],
+        customerExtras: <CustomerExtraConfig[]>[],
+        customers: <CustomerConfig[]>[]
     }
 }
 
@@ -51,6 +50,18 @@ export default class InvoiceConfigModule extends VuexModule {
     creationDate: Date = new Date("1900-01-01T09:51:42.460Z");
     invoiceDate: Date = new Date('2020-01-01');
     errorMessage = "";
+    customerTypes = <CustomerTypeConfig[]>[
+        {
+            customerType: "Kedjehus",
+            articleNumbers: ["Anläggning 1", "Anläggning 2"],
+        },
+        {
+            customerType: "Radhus",
+            articleNumbers: ["Anläggning 1", "Anläggning 2", "Anläggning 3"],
+        },
+        { customerType: "Extern fastighet", articleNumbers: ["Anläggning 1"] },
+    ]
+
 
     @MutationAction
     async loadInvoiceConfig() {
@@ -78,7 +89,13 @@ export default class InvoiceConfigModule extends VuexModule {
 
 
     get invoiceConfig(): InvoiceConfig {
-        return { creationDate: this.creationDate, invoiceDate: this.invoiceDate };
+        return {
+            creationDate: this.creationDate,
+            invoiceDate: this.invoiceDate,
+            customerTypes: <CustomerTypeConfig[]>[],
+            customerExtras: <CustomerExtraConfig[]>[],
+            customers: <CustomerConfig[]>[]
+        };
     }
 
     @Mutation
@@ -90,11 +107,31 @@ export default class InvoiceConfigModule extends VuexModule {
         return this.creationDate;
     }
 
-    @Mutation setErrorMessage(emsg:string) {
+    @Mutation setErrorMessage(emsg: string) {
         this.errorMessage = emsg;
     }
 
     get fetchErrorMessage() {
         return this.errorMessage;
+    }
+
+    get fetchCustomerTypes() {
+        return this.customerTypes
+    }
+
+    @Action
+    deleteCustomerType(ct: CustomerTypeConfig) {
+        const cTypes: CustomerTypeConfig[] = store.getters['invoiceConfigModule/fetchCustomerTypes'];
+        const ix = cTypes.indexOf(ct)
+
+        if (ix > -1) {
+            cTypes.splice(ix, 1)
+            store.commit('invoiceConfigModule/setCustomerTypes', cTypes)
+        }
+    }
+
+    @Mutation
+    setCustomerTypes(cTypes: CustomerTypeConfig[]) {
+        this.customerTypes = cTypes
     }
 }

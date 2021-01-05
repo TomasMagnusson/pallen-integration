@@ -5,11 +5,18 @@ import store from "../store";
 import { Customer, Article, Invoice, FortNoxData } from '../../models/fortNoxData';
 
 async function fetchData(): Promise<FortNoxData> {
-    const response = await fetch("api/fetchcustomers");
-    const cs: Customer[] = await response.json();
+    const response = await fetch("api/fetchcustomers")
+    const resp2 = await fetch('/api/fetcharticles')
+
+    const cs: Customer[] = await response.json()
+    const arts: Article[] = await resp2.json()
+
+    const artsMap = new Map<string, Article>()
+    arts.forEach( art => artsMap.set(art.ArticleNumer, art))
+
     return {
         customersData: cs,
-        articlesData: <Article[]>[],
+        articlesData: artsMap,
         invoicesData: <Invoice[]>[]
     }
 }
@@ -32,13 +39,14 @@ export async function fortNoxPlugin(store: any) {
 
 @Module({ namespaced: true })
 export default class FortNoxModule extends VuexModule {
-    customersData: Customer[] = [];
+    customersData: Customer[] = []
     invoicesData: Map<string, Invoice> = new Map<string, Invoice>()
+    articlesData: Map<string, Article> = new Map<string, Article>()
 
     @MutationAction
     async loadFortNoxData() {
         const fortNoxData = await loadPromise
-        return { customersData: fortNoxData.customersData }
+        return { customersData: fortNoxData.customersData, articlesData:  fortNoxData.articlesData}
     }
 
     @Action
@@ -65,5 +73,10 @@ export default class FortNoxModule extends VuexModule {
     @Mutation
     setInvoiceData(invsMap: Map<string, Invoice>) {
         this.invoicesData = invsMap
+    }
+
+    @Mutation
+    setInvoice(inv: Invoice) {
+        this.invoicesData.set(inv.CustomerNumber, inv)
     }
 }
