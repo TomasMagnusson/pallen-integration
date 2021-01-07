@@ -21,7 +21,7 @@ async function fetchData(): Promise<InvoiceConfig> {
     return {
         creationDate: new Date(j.creationDate),
         invoiceDate: new Date(j.invoiceDate),
-        customerTypes: j.customerTypes,
+        customerTypes: (j.customerTypes || <CustomerTypeConfig[]>[]),
         customerExtras: <CustomerExtraConfig[]>[],
         customers: <CustomerConfig[]>[]
     }
@@ -50,17 +50,7 @@ export default class InvoiceConfigModule extends VuexModule {
     creationDate: Date = new Date("1900-01-01T09:51:42.460Z");
     invoiceDate: Date = new Date('2020-01-01');
     errorMessage = "";
-    customerTypes = <CustomerTypeConfig[]>[
-        {
-            customerType: "Kedjehus",
-            articleNumbers: ["1", "2"],
-        },
-        {
-            customerType: "Radhus",
-            articleNumbers: ["1", "2", "3"],
-        },
-        { customerType: "Extern fastighet", articleNumbers: ["1"] },
-    ]
+    customerTypes = <CustomerTypeConfig[]>[]
 
 
     @MutationAction
