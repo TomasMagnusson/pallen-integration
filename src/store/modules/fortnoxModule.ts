@@ -12,7 +12,9 @@ async function fetchData(): Promise<FortNoxData> {
     const arts: Article[] = await resp2.json()
 
     const artsMap = new Map<string, Article>()
-    arts.forEach( art => artsMap.set(art.ArticleNumer, art))
+    arts.forEach( art => {
+        artsMap.set(art.ArticleNumber, art)})
+
 
     return {
         customersData: cs,
@@ -78,5 +80,9 @@ export default class FortNoxModule extends VuexModule {
     @Mutation
     setInvoice(inv: Invoice) {
         this.invoicesData.set(inv.CustomerNumber, inv)
+    }
+
+    get fetchArticles(): Map<string, Article> {
+        return this.articlesData
     }
 }

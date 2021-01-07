@@ -10,7 +10,7 @@ export interface Customer {
 }
 
 export interface Article {
-    ArticleNumer: string,
+    ArticleNumber: string,
     Description: string,
     SalesPrice: number
 }

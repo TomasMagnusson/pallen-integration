@@ -17,11 +17,11 @@ async function postData(_data: InvoiceConfig) {
 
 async function fetchData(): Promise<InvoiceConfig> {
     const response = await fetch("api/fetchinvoiceconfig");
-    const j = await response.json();
+    const j: InvoiceConfig = await response.json();
     return {
         creationDate: new Date(j.creationDate),
         invoiceDate: new Date(j.invoiceDate),
-        customerTypes: <CustomerTypeConfig[]>[],
+        customerTypes: j.customerTypes,
         customerExtras: <CustomerExtraConfig[]>[],
         customers: <CustomerConfig[]>[]
     }
@@ -53,13 +53,13 @@ export default class InvoiceConfigModule extends VuexModule {
     customerTypes = <CustomerTypeConfig[]>[
         {
             customerType: "Kedjehus",
-            articleNumbers: ["Anläggning 1", "Anläggning 2"],
+            articleNumbers: ["1", "2"],
         },
         {
             customerType: "Radhus",
-            articleNumbers: ["Anläggning 1", "Anläggning 2", "Anläggning 3"],
+            articleNumbers: ["1", "2", "3"],
         },
-        { customerType: "Extern fastighet", articleNumbers: ["Anläggning 1"] },
+        { customerType: "Extern fastighet", articleNumbers: ["1"] },
     ]
 
 
@@ -67,7 +67,7 @@ export default class InvoiceConfigModule extends VuexModule {
     async loadInvoiceConfig() {
         const invoiceConfig: InvoiceConfig = await fetchData();
         store.dispatch('fortNoxModule/findInvoices', invoiceConfig.invoiceDate)
-        return { creationDate: invoiceConfig.creationDate, invoiceDate: invoiceConfig.invoiceDate };
+        return { creationDate: invoiceConfig.creationDate, invoiceDate: invoiceConfig.invoiceDate, customerTypes: invoiceConfig.customerTypes };
     }
 
     // @Mutation
@@ -92,7 +92,7 @@ export default class InvoiceConfigModule extends VuexModule {
         return {
             creationDate: this.creationDate,
             invoiceDate: this.invoiceDate,
-            customerTypes: <CustomerTypeConfig[]>[],
+            customerTypes: this.customerTypes,
             customerExtras: <CustomerExtraConfig[]>[],
             customers: <CustomerConfig[]>[]
         };
@@ -133,5 +133,15 @@ export default class InvoiceConfigModule extends VuexModule {
     @Mutation
     setCustomerTypes(cTypes: CustomerTypeConfig[]) {
         this.customerTypes = cTypes
+        schedulePersist()
+    }
+
+    @Mutation
+    updateCustomerType(cType: CustomerTypeConfig) {
+        const custType = this.customerTypes.find(ct => ct.customerType === cType.customerType)
+        if (custType) {
+            custType.articleNumbers = cType.articleNumbers
+            schedulePersist()
+        }
     }
 }
