@@ -22,7 +22,7 @@ async function fetchData(): Promise<InvoiceConfig> {
         creationDate: new Date(j.creationDate),
         invoiceDate: new Date(j.invoiceDate),
         customerTypes: (j.customerTypes || <CustomerTypeConfig[]>[]),
-        customerExtras: <CustomerExtraConfig[]>[],
+        customerExtras: (j.customerExtras || <CustomerExtraConfig[]>[]),
         customers: <CustomerConfig[]>[]
     }
 }
@@ -51,21 +51,19 @@ export default class InvoiceConfigModule extends VuexModule {
     invoiceDate: Date = new Date('2020-01-01');
     errorMessage = "";
     customerTypes = <CustomerTypeConfig[]>[]
+    customersExtras = <CustomerExtraConfig[]>[]
 
 
     @MutationAction
     async loadInvoiceConfig() {
         const invoiceConfig: InvoiceConfig = await fetchData();
         store.dispatch('fortNoxModule/findInvoices', invoiceConfig.invoiceDate)
-        return { creationDate: invoiceConfig.creationDate, invoiceDate: invoiceConfig.invoiceDate, customerTypes: invoiceConfig.customerTypes };
+        return { creationDate: invoiceConfig.creationDate, 
+            invoiceDate: invoiceConfig.invoiceDate, 
+            customerTypes: invoiceConfig.customerTypes,
+            customersExtras: invoiceConfig.customerExtras,
+        };
     }
-
-    // @Mutation
-    // async storeInvoiceConfig(_invoiceConfig: InvoiceConfig) {
-    //     this.invoiceConfig = _invoiceConfig;
-    //     console.log(_invoiceConfig);
-    //     await postData(_invoiceConfig);
-    // }
 
     @Mutation
     setInvoiceDate(d: Date) {
@@ -83,7 +81,7 @@ export default class InvoiceConfigModule extends VuexModule {
             creationDate: this.creationDate,
             invoiceDate: this.invoiceDate,
             customerTypes: this.customerTypes,
-            customerExtras: <CustomerExtraConfig[]>[],
+            customerExtras: this.customersExtras,
             customers: <CustomerConfig[]>[]
         };
     }
@@ -104,6 +102,8 @@ export default class InvoiceConfigModule extends VuexModule {
     get fetchErrorMessage() {
         return this.errorMessage;
     }
+
+    /* Customer Type Config */
 
     get fetchCustomerTypes() {
         return this.customerTypes
@@ -131,6 +131,39 @@ export default class InvoiceConfigModule extends VuexModule {
         const custType = this.customerTypes.find(ct => ct.customerType === cType.customerType)
         if (custType) {
             custType.articleNumbers = cType.articleNumbers
+            schedulePersist()
+        }
+    }
+
+    /* Customer Extra Config */
+
+    get fetchCustomerExtras() {
+        return this.customersExtras
+    }
+
+    @Action
+    deleteCustomerExtra(ce: CustomerExtraConfig) {
+        const cExtras: CustomerExtraConfig[] = store.getters['invoiceConfigModule/fetchCustomerExtras']
+        const ix = cExtras.indexOf(ce)
+
+        if (ix > -1) {
+            cExtras.splice(ix, 1)
+            store.commit('invoiceConfigModule/setCustomerExtras', cExtras)
+        }
+    }
+
+    @Mutation
+    setCustomerExtras(cExtras: CustomerExtraConfig[]) {
+        this.customersExtras = cExtras
+        schedulePersist()
+    }
+
+    @Mutation
+    updateCustomerExtra(cExtra: CustomerExtraConfig) {
+        const custExtra = this.customersExtras.find( ce => ce.description === cExtra.description)
+
+        if (custExtra) {
+            custExtra.price = cExtra.price
             schedulePersist()
         }
     }

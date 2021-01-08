@@ -21,6 +21,7 @@
         </v-col>
       </v-row>
 
+      <!-- Fastighetstyper -->
       <v-data-table
         :headers="customerTypeHeaders"
         :items="CustomerTypeData"
@@ -31,7 +32,16 @@
           <v-toolbar flat>
             <v-toolbar-title>Fastighetstyper</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-icon large @click="CustomerTypeData.push( {customerType: '- Klicka! -', articleNumbers: []} )">mdi-plus-circle</v-icon>
+            <v-icon
+              large
+              @click="
+                CustomerTypeData.push({
+                  customerType: '- Klicka! -',
+                  articleNumbers: [],
+                })
+              "
+              >mdi-plus-circle</v-icon
+            >
           </v-toolbar>
         </template>
 
@@ -63,12 +73,72 @@
           <v-icon small @click="deleteCustomerType(item)"> mdi-delete </v-icon>
         </template>
       </v-data-table>
+
+      <!-- Extrarader -->
+      <v-data-table
+        style="margin-top: 20px"
+        :headers="customerExtraHeaders"
+        :items="CustomerExtraData"
+        hide-default-footer
+        class="elevation-1"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>Extra fakturarader</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-icon
+              large
+              @click="
+                CustomerExtraData.push({
+                  description: '- Klicka! -',
+                  price: '- Klicka! -',
+                })
+              "
+              >mdi-plus-circle</v-icon
+            >
+          </v-toolbar>
+        </template>
+
+        <template v-slot:item.description="{ item }">
+          <v-edit-dialog @close="saveCustomerExtra(item)" 
+          :return-value.sync="item.description"
+          >
+            {{ item.description }}
+            <template v-slot:input>
+              <v-text-field v-model="item.description"> </v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+
+        <template v-slot:item.price="{ item }">
+          <v-edit-dialog
+            @close="saveCustomerExtra(item)"
+            :return-value.sync="item.price"
+          >
+            {{ item.price }}
+            <template v-slot:input>
+              <v-text-field
+                v-model.number="item.price"
+                type="number"
+                :rules="[
+                  (x) => /^\-?[1-9]\d{0,3}$/.test(x) || 'Anges som kronor, max 4 siffror',
+                ]"
+              >
+              </v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+
+        <template v-slot:item.actions="{ item }">
+          <v-icon small @click="deleteCustomerExtra(item)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
     </v-container>
   </div>
 </template>
 
 <script lang='ts'>
-import { CustomerTypeConfig } from "@/models/configData";
+import { CustomerTypeConfig, CustomerExtraConfig } from "@/models/configData";
 import { Article } from "@/models/fortNoxData";
 
 import Vue from "vue";
@@ -80,21 +150,6 @@ import store from "../store/store";
   store,
 })
 export default class InvoiceSettings extends Vue {
-  get articleMap(): Map<string, Article> {
-    return this.$store.getters["fortNoxModule/fetchArticles"];
-  }
-
-  arts2decriptions(artlist: string[]): string {
-    let retval = "";
-
-    artlist.forEach((art) => {
-      retval +=
-        (retval.length > 0 ? ", " : "") + this.articleMap.get(art)?.Description;
-    });
-
-    return retval.length > 0 ? retval : '- Klicka! -';
-  }
-
   get creationDate() {
     return this.$store.getters[
       "invoiceConfigModule/fetchCreationDate"
@@ -113,6 +168,23 @@ export default class InvoiceSettings extends Vue {
     return this.$store.getters[
       "invoiceConfigModule/fetchInvoiceDate"
     ].toLocaleDateString();
+  }
+
+  /* Customer types */
+
+  get articleMap(): Map<string, Article> {
+    return this.$store.getters["fortNoxModule/fetchArticles"];
+  }
+
+  arts2decriptions(artlist: string[]): string {
+    let retval = "";
+
+    artlist.forEach((art) => {
+      retval +=
+        (retval.length > 0 ? ", " : "") + this.articleMap.get(art)?.Description;
+    });
+
+    return retval.length > 0 ? retval : "- Klicka! -";
   }
 
   customerTypeHeaders = [
@@ -136,6 +208,31 @@ export default class InvoiceSettings extends Vue {
 
   saveCustomerType(ct: CustomerTypeConfig) {
     this.$store.commit("invoiceConfigModule/updateCustomerType", ct);
+  }
+
+  /* Extra rows */
+
+  get CustomerExtraData() {
+    return this.$store.getters["invoiceConfigModule/fetchCustomerExtras"];
+  }
+
+  customerExtraHeaders = [
+    {
+      text: "Beskrivning",
+      align: "start",
+      sortable: false,
+      value: "description",
+    },
+    { text: "Belopp", value: "price", sortable: false },
+    { text: "Ta bort", value: "actions", sortable: false },
+  ];
+
+  saveCustomerExtra(ce: CustomerExtraConfig) {
+    this.$store.commit("invoiceConfigModule/updateCustomerExtra", ce);
+  }
+
+  deleteCustomerExtra(ce: CustomerExtraConfig) {
+    this.$store.dispatch("invoiceConfigModule/deleteCustomerExtra", ce);
   }
 }
 </script>
