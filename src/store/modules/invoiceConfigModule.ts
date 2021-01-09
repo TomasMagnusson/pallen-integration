@@ -5,6 +5,7 @@ import Vuex, { StoreOptions } from 'vuex';
 // import { InvoiceConfig } from "../../../api/models/InvoiceModels";
 import store from "../store";
 import { CustomerTypeConfig, InvoiceConfig, CustomerExtraConfig, CustomerConfig } from '@/models/configData'
+import { Customer } from '@/models/fortNoxData'
 
 async function postData(_data: InvoiceConfig) {
     const response = await fetch("api/saveinvoiceconfig", {
@@ -23,7 +24,7 @@ async function fetchData(): Promise<InvoiceConfig> {
         invoiceDate: new Date(j.invoiceDate),
         customerTypes: (j.customerTypes || <CustomerTypeConfig[]>[]),
         customerExtras: (j.customerExtras || <CustomerExtraConfig[]>[]),
-        customers: <CustomerConfig[]>[]
+        customers: (j.customers || <CustomerConfig[]>[]),
     }
 }
 
@@ -52,6 +53,7 @@ export default class InvoiceConfigModule extends VuexModule {
     errorMessage = "";
     customerTypes = <CustomerTypeConfig[]>[]
     customersExtras = <CustomerExtraConfig[]>[]
+    customers = new Map<string, CustomerConfig>()
 
 
     @MutationAction
@@ -62,6 +64,10 @@ export default class InvoiceConfigModule extends VuexModule {
             invoiceDate: invoiceConfig.invoiceDate, 
             customerTypes: invoiceConfig.customerTypes,
             customersExtras: invoiceConfig.customerExtras,
+            customers: (() => {
+                const m = new Map<string, CustomerConfig>(); 
+                invoiceConfig.customers.forEach( cc => m.set(cc.customerNumber, cc)); 
+                return m; })(),
         };
     }
 
@@ -82,7 +88,7 @@ export default class InvoiceConfigModule extends VuexModule {
             invoiceDate: this.invoiceDate,
             customerTypes: this.customerTypes,
             customerExtras: this.customersExtras,
-            customers: <CustomerConfig[]>[]
+            customers: Array.from(this.customers.values()),
         };
     }
 
@@ -166,5 +172,48 @@ export default class InvoiceConfigModule extends VuexModule {
             custExtra.price = cExtra.price
             schedulePersist()
         }
+    }
+
+    /* Customer Config */
+
+    get fetchCustomerConfigs() {
+        const customers: Customer[] = store.getters['fortNoxModule/fetchCustomers']
+        const ccs: CustomerConfig[] = []
+
+        customers.forEach( cust => {
+            ccs.push(
+                {
+                    customerNumber: cust.CustomerNumber,
+                    customerType: this.customers.get(cust.CustomerNumber)?.customerType || "- Välj -",
+                    customerExtras: this.customers.get(cust.CustomerNumber)?.customerExtras || [],
+                }
+            )
+        })
+
+        return ccs
+    }
+
+    get fetchCustomers() {
+        return this.customers
+    }
+
+    @Mutation
+    setCustomers(custs: Map<string, CustomerConfig>) {
+        this.customers = new Map(custs)
+        schedulePersist()
+    }
+
+    @Mutation
+    updateCustomerConfig(cc: CustomerConfig) {
+        this.customers.set(cc.customerNumber, cc)
+        schedulePersist()
+    }
+
+    @Action
+    deleteCustomerConfig(cc: CustomerConfig) {
+        const customers: Map<string, CustomerConfig> = store.getters['invoiceConfigModule/fetchCustomers']
+
+        customers.delete(cc.customerNumber)
+        store.commit('invoiceConfigModule/setCustomers', customers)
     }
 }

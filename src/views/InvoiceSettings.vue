@@ -76,7 +76,7 @@
 
       <!-- Extrarader -->
       <v-data-table
-        style="margin-top: 20px"
+        style="margin-top: 40px"
         :headers="customerExtraHeaders"
         :items="CustomerExtraData"
         hide-default-footer
@@ -100,8 +100,9 @@
         </template>
 
         <template v-slot:item.description="{ item }">
-          <v-edit-dialog @close="saveCustomerExtra(item)" 
-          :return-value.sync="item.description"
+          <v-edit-dialog
+            @close="saveCustomerExtra(item)"
+            :return-value.sync="item.description"
           >
             {{ item.description }}
             <template v-slot:input>
@@ -121,7 +122,9 @@
                 v-model.number="item.price"
                 type="number"
                 :rules="[
-                  (x) => /^\-?[1-9]\d{0,3}$/.test(x) || 'Anges som kronor, max 4 siffror',
+                  (x) =>
+                    /^\-?[1-9]\d{0,3}$/.test(x) ||
+                    'Anges som kronor, max 4 siffror',
                 ]"
               >
               </v-text-field>
@@ -133,12 +136,72 @@
           <v-icon small @click="deleteCustomerExtra(item)"> mdi-delete </v-icon>
         </template>
       </v-data-table>
+
+      <!-- Fastigheter -->
+
+      <v-data-table
+        style="margin-top: 40px"
+        :headers="customerConfigHeaders"
+        :items="CustomerConfigData"
+        hide-default-footer
+        class="elevation-1"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>Fastigheter</v-toolbar-title>
+          </v-toolbar>
+        </template>
+
+        <template v-slot:item.customerType="{ item }">
+          <v-edit-dialog
+            @close="saveCustomerConfig(item)"
+          >
+            {{ item.customerType }}
+            <template v-slot:input>
+              <v-radio-group v-model="item.customerType">
+                <v-radio
+                  v-for="ct in CustomerTypeData"
+                  :key="ct"
+                  :label="ct.customerType"
+                  :value="ct.customerType"
+                ></v-radio>
+              </v-radio-group>
+            </template>
+          </v-edit-dialog>
+        </template>
+
+        <template v-slot:item.customerExtras="{ item }">
+          <v-edit-dialog
+            @close="saveCustomerConfig(item)"
+          >
+            {{ item.customerExtras.toString() || "- Välj -" }}
+            <template v-slot:input>
+              <v-checkbox
+                v-for="ekey in CustomerExtraData"
+                v-bind:key="ekey"
+                :label="ekey.description"
+                :value="ekey.description"
+                v-model="item.customerExtras"
+              ></v-checkbox>
+            </template>
+          </v-edit-dialog>
+        </template>
+
+        <template v-slot:item.actions="{ item }">
+          <v-icon small @click="deleteCustomerConfig(item)"> mdi-delete </v-icon>
+        </template>
+        
+      </v-data-table>
     </v-container>
   </div>
 </template>
 
 <script lang='ts'>
-import { CustomerTypeConfig, CustomerExtraConfig } from "@/models/configData";
+import {
+  CustomerTypeConfig,
+  CustomerExtraConfig,
+  CustomerConfig,
+} from "@/models/configData";
 import { Article } from "@/models/fortNoxData";
 
 import Vue from "vue";
@@ -233,6 +296,32 @@ export default class InvoiceSettings extends Vue {
 
   deleteCustomerExtra(ce: CustomerExtraConfig) {
     this.$store.dispatch("invoiceConfigModule/deleteCustomerExtra", ce);
+  }
+
+  /* Customer Config */
+
+  get CustomerConfigData() {
+    return this.$store.getters["invoiceConfigModule/fetchCustomerConfigs"];
+  }
+
+  customerConfigHeaders = [
+    {
+      text: "Beteckning",
+      align: "start",
+      sortable: false,
+      value: "customerNumber",
+    },
+    { text: "Fastighetstyp", value: "customerType", sortable: false },
+    { text: "Extrarader", value: "customerExtras", sortable: false },
+    { text: "Ta bort", value: "actions", sortable: false },
+  ];
+
+  saveCustomerConfig(cc: CustomerConfig) {
+    this.$store.commit("invoiceConfigModule/updateCustomerConfig", cc);
+  }
+
+  deleteCustomerConfig(cc: CustomerConfig) {
+    this.$store.dispatch("invoiceConfigModule/deleteCustomerConfig", cc);
   }
 }
 </script>
